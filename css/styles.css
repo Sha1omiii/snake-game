@@ -1,0 +1,27 @@
+body {
+    background-color: rgba(104, 102, 143, 1);
+}
+
+#game-container {
+    font-family: "Tiny5", cursive;
+    color: rgba(162, 242, 146, 1);
+    text-align: center;
+    font-size: 23px;
+}
+
+#gameSection {
+    border: 3px solid;
+    border-radius: 5px;
+}
+
+#scoreTxt {
+    font-size: 45px;
+}
+
+#restart {
+    font-family: "Tiny5", cursive;
+    font-size: 25px;
+    background-color: rgba(134, 111, 9, 1);
+    color:rgba(162, 242, 146, 1);
+    cursor: pointer;
+}
