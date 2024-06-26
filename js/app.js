@@ -8,7 +8,7 @@ const gridSize = 20;
 const height = gameSection.height;
 const width = gameSection.width;
 
-let gameRunning = false;
+let isGameRunning = false;
 let score = 0;
 let snake = [
     {x: gridSize * 3, y: 0},
@@ -16,7 +16,6 @@ let snake = [
     {x: gridSize, y: 0},
     {x: 0, y: 0},
 ];
-let direction = {x: 0, y: 0};
 let snakeColor = 'green';
 let appleColor = 'red';
 let appleX;
@@ -30,14 +29,6 @@ let distanceX = gridSize;
 let distanceY = 0;
 
 
-// restartBtn.addEventListener('click', function() {
-//     alert('hello');
-// });
-// window.addEventListener("keydown", function () {
-//     this.alert('working')
-// ;});
-// buttons work --
-
 
 startGame();
 
@@ -45,15 +36,15 @@ function startGame () {
     // random placement of food and render it 
     //current score 
     //the game conditional 
-    gameRunning = true;
-    drawApple();
+    isGameRunning = true;
+    randomApple();
     displayApple();
     onTick();
 }
 
 //I want it to to randomly pick a number
 //in the range of the canvas section (its width and height)
-function drawApple () {
+function randomApple () {
     appleX = Math.round(Math.random() * (width / gridSize)) * gridSize;
     appleY = Math.round(Math.random() * (height / gridSize)) * gridSize;
 
@@ -92,7 +83,7 @@ function canTheSnakeMove () {
         scoreEl.textContent = score;
         //clear the previous apple and then
         clearGameSec();
-        drawApple();
+        randomApple();
         displayApple();
     }
     else {
@@ -101,9 +92,7 @@ function canTheSnakeMove () {
     }
 }
 
-
-document.addEventListener('click', snakeDirection);
-function snakeDirection (event) {
+function changeSnakeDirection (event) {
     const clickedArrows = event.keyCode;
     const leftArw = 37;
     const rightArw = 39;
@@ -112,37 +101,36 @@ function snakeDirection (event) {
 
     const isGoingUp = distanceY === -gridSize;
     const isGoingDown = distanceY === gridSize;
-    const isGoingRight = distanceY === gridSize;
-    const isGoingLeft = distanceY === -gridSize;
+    const isGoingRight = distanceX === gridSize;
+    const isGoingLeft = distanceX === -gridSize;
 
     if (clickedArrows === leftArw && !isGoingRight) {
         distanceX = -gridSize;
         distanceY = 0;
     }
-    if (clickedArrows === rightArw && !isGoingLeft) {
+    else if (clickedArrows === rightArw && !isGoingLeft) {
         distanceX = gridSize;
         distanceY = 0;
     }
-    if (clickedArrows === upArw && !isGoingDown) {
-        distanceX = -gridSize;
-        distanceY = 0;
+    else if (clickedArrows === upArw && !isGoingDown) {
+        distanceX = 0;
+        distanceY = -gridSize;
     }
-    if (clickedArrows === downArw && !isGoingUp) {
+    else if (clickedArrows === downArw && !isGoingUp) {
         distanceX = 0;
         distanceY = gridSize;
     }
     
 }
 
-
 function onTick () {
-    if (gameRunning) {
+    if (isGameRunning) {
         setTimeout(() => {
-            
+            clearGameSec();
             displayApple();
             canTheSnakeMove();
             drawSnake();
-            snakeDirection
+            // changeSnakeDirection();
             onTick();
         }, 95);
     }   
@@ -156,3 +144,43 @@ function clearGameSec () {
     context.fillRect(0, 0, width, height);
 }
 
+function gameOver () {
+    //game is over if
+    //snake is out of the canvas boundry
+    let isGameOver = false;
+    if (snake[0].x < 0) {
+        isGameOver = true;
+        console.log('left wall');//test
+    }
+    else if (snake[0].x >= width) {
+        isGameOver = true;
+        console.log('left wall');//test
+    }
+    if (snake[0].y < 0) {
+        isGameOver = true;
+        console.log('top wall');//test
+    }
+    if (snake[0].x >= height) {
+        isGameOver = true;
+        console.log('bottom wall');//test
+    }
+
+    //collision with its units
+    for (let i = 1; i < snake.length; i++) {
+        if(snake[i].x === snake[0].x && snake[i].y === snake[0]) {
+            isGameOver = True;
+            console.log('collided with itself');
+        }
+    }
+
+}
+
+// function renderGameOver () {
+//     context.fillStyle = 'white';
+//     context.font = '60px cursive';
+//     context.fillText('Game Over ', width/6.5, height/2);
+//     isGameRunning = false;
+// }
+
+document.addEventListener('keydown', changeSnakeDirection);
+// restartBtn.addEventListener('click', resetGame);
