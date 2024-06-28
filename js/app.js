@@ -10,6 +10,7 @@ const gridSize = 20;
 const height = gameSection.height;
 const width = gameSection.width;
 
+let isChangingDir = false;
 let isGameRunning = false;
 let score = 0;
 let highScore = 0;
@@ -20,7 +21,8 @@ let snake = [
     {x: 0, y: 0},
 ];
 let backgroundColor = 'rgba(104, 102, 143, 1)';
-let snakeColor = 'green';
+let snakeColor = 'rgba(0, 0, 0, 1)';
+let snakeBorderColor = 'rgba(102, 153, 102, 1)';
 let appleColor = 'red';
 let appleX;
 let appleY;
@@ -37,9 +39,6 @@ let distanceY = 0;
 startGame();
 
 function startGame () {
-    // random placement of food and render it 
-    //current score 
-    //the game conditional 
     isGameRunning = true;
     generateApple();
     displayApple();
@@ -60,18 +59,31 @@ function generateApple () {
 }
 
 function displayApple () {
+    let radius = 10;
+    context.beginPath()
     context.fillStyle = appleColor;
-    context.fillRect(appleX, appleY, gridSize, gridSize);
-    context.strokeStyle = 'yellow';
-    context.strokeRect(appleX, appleY, gridSize, gridSize);
+    context.arc(appleX + radius, appleY + radius , radius, 0, 2 * Math.PI);
+    
+    context.fill();
+    // context.fillStyle = appleColor;
+    // context.fillRect(appleX, appleY, gridSize, gridSize);
+    // context.strokeStyle = 'yellow';
+    // context.strokeRect(appleX, appleY, gridSize, gridSize);
 }
 
 function drawSnake () {
+    // context.fillStyle = snakeColor;
+    // context.strokeStyle = snakeBorderColor;
+    // for(let snakeUnit of snake) {
+    //     context.fillRect(snakeUnit.x, snakeUnit.y, gridSize, gridSize);
+    //     context.strokeRect(snakeUnit.x, snakeUnit.y, gridSize, gridSize);
+    // } 
+
     context.fillStyle = snakeColor;
     for(let snakeUnit of snake) {
-        context.fillRect(snakeUnit.x, snakeUnit.y, gridSize, gridSize);
-        // context.strokeRect(snakeUnit.x, snakeUnit.y, gridSize, gridSize);
-        
+        context.beginPath();
+        context.arc(snakeUnit.x + gridSize / 2, snakeUnit.y + gridSize / 2, gridSize / 2, 0, 2 * Math.PI);
+        context.fill();
     } 
 }
 
@@ -88,11 +100,12 @@ function canTheSnakeMove () {
     //only pop when the apple and snake are not overlapping 
     if (snake[0].x === appleX && snake[0].y === appleY) {
         score+= 1;
-        scoreEl.textContent = score;
+        scoreEl.textContent = `Current score ${score}`;
         //clear the previous apple and then
         clearGameSec();
         generateApple();
         // displayApple();
+        
     }
     else {
         let endPiece = snake.pop();
@@ -101,43 +114,43 @@ function canTheSnakeMove () {
 }
 
 function changeSnakeDirection (event) {
-    const clickedArrows = event.keyCode;
-    const leftArw = 37;
-    const rightArw = 39;
-    const upArw = 38;
-    const downArw = 40;
+    
+    if (isChangingDir) return;
+    isChangingDir = true;
 
+    const key = event.keyCode;
     const isGoingUp = distanceY === -gridSize;
     const isGoingDown = distanceY === gridSize;
     const isGoingRight = distanceX === gridSize;
     const isGoingLeft = distanceX === -gridSize;
-
-    if (clickedArrows === leftArw && !isGoingRight) {
+    
+    if (key === 37 && !isGoingRight) { //if left key pressed
         distanceX = -gridSize;
         distanceY = 0;
     }
-    else if (clickedArrows === rightArw && !isGoingLeft) {
+    else if (key === 39 && !isGoingLeft) { //if right key pressed
         distanceX = gridSize;
         distanceY = 0;
     }
-    else if (clickedArrows === upArw && !isGoingDown) {
+    else if (key === 38 && !isGoingDown) { //if up key pressed
         distanceX = 0;
         distanceY = -gridSize;
     }
-    else if (clickedArrows === downArw && !isGoingUp) {
+    else if (key === 40 && !isGoingUp) { //if down key pressed
         distanceX = 0;
         distanceY = gridSize;
     }
+    
 }
 
 function onTick () {
     if (isGameRunning) {
         setTimeout(() => {
+            isChangingDir = false;
             clearGameSec();
             displayApple();
             canTheSnakeMove();
             drawSnake();
-            // changeSnakeDirection();
             gameOver()
             onTick();
         }, 95);
@@ -160,7 +173,7 @@ function gameOver () {
     bodyCollision();
     if (score > highScore) {
         highScore = score;
-        highScoreEl.textContent = `Your highest score: ${highScore}`;
+        highScoreEl.textContent = `highest score: ${highScore}`;
     }
 }
 
@@ -192,6 +205,8 @@ function bodyCollision () {
     }
 }
 
+
+
 function gameOverText () {
     if (!isGameRunning) {
         context.fillStyle = 'white';
@@ -204,7 +219,7 @@ function gameOverText () {
 
 function restartGame () {
     score = 0;
-    scoreEl.textContent = score;
+    scoreEl.textContent = `Current Score: ${score}`;
     snake = [
         {x: gridSize * 3, y: 0},
         {x: gridSize * 2, y: 0},

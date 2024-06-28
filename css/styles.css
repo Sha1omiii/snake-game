@@ -1,21 +1,23 @@
 body {
     background-color: rgba(104, 102, 143, 1);
+    align-content: center;
 }
 
 #game-container {
     font-family: "Tiny5", cursive;
-    color: rgba(162, 242, 146, 1);
+    color: rgba(0, 0, 0, 1);
     text-align: center;
     font-size: 23px;
 }
-
+/* /* rgba(162, 242, 146, 1 font header */
 #gameSection {
     border: 3px solid;
     border-radius: 5px;
 }
 
-#scoreTxt {
-    font-size: 45px;
+#scoreTxt, #highScore {
+    font-size: 27px;
+    color: rgba(162, 242, 146, 1);
 }
 
 #restart {
@@ -25,3 +27,4 @@ body {
     color:rgba(162, 242, 146, 1);
     cursor: pointer;
 }
+
