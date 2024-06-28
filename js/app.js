@@ -2,7 +2,9 @@ const gameSection = document.getElementById('gameSection');
 const context = gameSection.getContext('2d');
 //getContext basically allows us to draw on our canvas (in this case a 2 dimentional object)
 const scoreEl = document.getElementById('scoreTxt');
+const highScoreEl = document.getElementById('highScore');
 const restartBtn = document.getElementById('restart');
+
 
 const gridSize = 20;
 const height = gameSection.height;
@@ -10,12 +12,14 @@ const width = gameSection.width;
 
 let isGameRunning = false;
 let score = 0;
+let highScore = 0;
 let snake = [
     {x: gridSize * 3, y: 0},
     {x: gridSize * 2, y: 0},
     {x: gridSize, y: 0},
     {x: 0, y: 0},
 ];
+let backgroundColor = 'rgba(104, 102, 143, 1)';
 let snakeColor = 'green';
 let appleColor = 'red';
 let appleX;
@@ -37,18 +41,22 @@ function startGame () {
     //current score 
     //the game conditional 
     isGameRunning = true;
-    randomApple();
+    generateApple();
     displayApple();
     onTick();
 }
 
 //I want it to to randomly pick a number
 //in the range of the canvas section (its width and height)
-function randomApple () {
-    appleX = Math.round(Math.random() * (width / gridSize)) * gridSize;
-    appleY = Math.round(Math.random() * (height / gridSize)) * gridSize;
+function generateApple () {
+    function random (low, high) {
+        let randAppl = Math.round(Math.random() * (((high - low) + low)) / gridSize) * gridSize; 
+        return randAppl;
+    }
+    appleX = random(0, width - gridSize);
+    appleY = random(0, height - gridSize);
 
-    console.log(appleX, appleY); 
+    console.log(appleX, appleY); //test
 }
 
 function displayApple () {
@@ -83,8 +91,8 @@ function canTheSnakeMove () {
         scoreEl.textContent = score;
         //clear the previous apple and then
         clearGameSec();
-        randomApple();
-        displayApple();
+        generateApple();
+        // displayApple();
     }
     else {
         let endPiece = snake.pop();
@@ -120,7 +128,6 @@ function changeSnakeDirection (event) {
         distanceX = 0;
         distanceY = gridSize;
     }
-    
 }
 
 function onTick () {
@@ -131,56 +138,82 @@ function onTick () {
             canTheSnakeMove();
             drawSnake();
             // changeSnakeDirection();
+            gameOver()
             onTick();
         }, 95);
     }   
     else {
-        gameOver();
+        gameOverText();
     }
 }
 
 function clearGameSec () {
-    context.fillStyle = 'rgba(104, 102, 143, 1)';
+    context.fillStyle = backgroundColor;
     context.fillRect(0, 0, width, height);
 }
 
 function gameOver () {
     //game is over if
     //snake is out of the canvas boundry
-    let isGameOver = false;
+    wallCollision();
+    //collision with its units
+    bodyCollision();
+    if (score > highScore) {
+        highScore = score;
+        highScoreEl.textContent = `Your highest score: ${highScore}`;
+    }
+}
+
+function wallCollision () {
     if (snake[0].x < 0) {
-        isGameOver = true;
+        isGameRunning = false;
         console.log('left wall');//test
     }
     else if (snake[0].x >= width) {
-        isGameOver = true;
-        console.log('left wall');//test
+        isGameRunning = false;
+        console.log('right wall');//test
     }
-    if (snake[0].y < 0) {
-        isGameOver = true;
+    else if (snake[0].y < 0) {
+        isGameRunning = false;
         console.log('top wall');//test
     }
-    if (snake[0].x >= height) {
-        isGameOver = true;
+    else if (snake[0].y >= height) {
+        isGameRunning = false;
         console.log('bottom wall');//test
     }
-
-    //collision with its units
-    for (let i = 1; i < snake.length; i++) {
-        if(snake[i].x === snake[0].x && snake[i].y === snake[0]) {
-            isGameOver = True;
+}
+function bodyCollision () {
+    for (let i = 1; i < snake.length; i+=1) {
+        if(snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+            isGameRunning = false;
             console.log('collided with itself');
+            
         }
     }
-
 }
 
-// function renderGameOver () {
-//     context.fillStyle = 'white';
-//     context.font = '60px cursive';
-//     context.fillText('Game Over ', width/6.5, height/2);
-//     isGameRunning = false;
-// }
+function gameOverText () {
+    if (!isGameRunning) {
+        context.fillStyle = 'white';
+        context.font = '60px Tiny5';
+        context.fillText('Game Over ', width /5, height / 2);
+        isGameRunning = false;
+    }    
+    
+}
 
-document.addEventListener('keydown', changeSnakeDirection);
-// restartBtn.addEventListener('click', resetGame);
+function restartGame () {
+    score = 0;
+    scoreEl.textContent = score;
+    snake = [
+        {x: gridSize * 3, y: 0},
+        {x: gridSize * 2, y: 0},
+        {x: gridSize, y: 0},
+        {x: 0, y: 0},
+    ];
+    distanceX = gridSize;
+    distanceY = 0;
+    startGame();
+}
+window.addEventListener('keydown', changeSnakeDirection);
+restartBtn.addEventListener('click', restartGame);
