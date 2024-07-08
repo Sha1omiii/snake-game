@@ -13,17 +13,29 @@
     <script defer src="js/app.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="game-container">
         <h1 id="game-title">Snake Game</h1>
+        <button id="how-to-play">Hover Here - How To Play?</button>
+        <p id="hide">
+            Controls:<br>To move the snake in different directions, use the keyboard's arrow keys. <br>
+            As soon as the browser loads, the snake automatically begins to move.<br>
+            Play:<br>The game section's left side is where the snake starts.<br>
+            Help the snake to consume the food.<br>
+            The snake gets longer every time it eats.<br>
+            To avoid ending the game by hitting the walls or colliding with your own tail, take caution when doing so.<br>
+            The more circles you add to the snake, the higher your score will be.<br>
+            Eat as much food as you can before the game ends to beat your previous high score.<br>
+            Winning:<br>You can only win when there is no more space left for the snake to move.
+        </p>
         <div id="scores">
             <div id="scoreTxt">Current Score: 0</div>
             <div id="highScore">HighScore: 0</div>
         </div>
-        
         <canvas id="gameSection" height="600" width="600"></canvas> <br>
+        <button id="start-game">Start Game</button>
         <button id="restart">Play Again</button>
         
     </div>

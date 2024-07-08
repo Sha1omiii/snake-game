@@ -27,9 +27,9 @@ Also I need to store the `gamesection.width` and `gamesection.height` values in 
 Divide my canvas into grids and store the value of one grid into a variable called `gridSize`
 > This way, it is easier for me to understand how to work with snake movement and food collisions
 
-I also need to define the snake as an array of objects with x and y coordinates
->> it can be something like `wholeSnake = [{x, 0}]
-with x and y coordinates so we can easily manipulate the snake's size
+I also need to define the snake as an array of objects with x and y coordinates:
+> it can be something like `wholeSnake = [{x: gridSize * 3 , y: 0},{x: gridSize * 2, y: 0}{x: gridSize, y: 0},{x: 0, y: 0}];
+
 Define `eggX` and `eggY` for our egg to apear in our canvas. 
 > I will write a function that will use `Math.random` to make the egg apear randomly in the range of our `width` and `height`
 

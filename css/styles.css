@@ -4,8 +4,11 @@ body {
 }
 
 #game-container {
-    display: flex-box;
-    font-family: "Tiny5", cursive;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "Chakra Petch", cursive;
     color: rgba(28, 58, 19, 1);
     text-align: center;
     font-size: 23px;
@@ -16,14 +19,31 @@ body {
     border-radius: 5px;
     color: rgba(236, 78, 32, 1);
 }
-
-#scoreTxt, #highScore {
+#scores {
+    display: flex;
+    justify-content: space-between;
+    gap: 6%;
     font-size: 37px;
     color: rgba(28, 58, 19, 1);
 }
 
+#hide {
+    display: none;
+}
+
+#how-to-play:hover + #hide {
+    display: block;
+    color: rgba(87, 79, 42, 1);
+}
+
+#start-game {
+    font-size: 25px;
+    background-color: rgba(28, 58, 19, 1);
+    color:rgba(162, 242, 146, 1);
+}
+
 #restart {
-    font-family: "Tiny5", cursive;
+    display: none;
     font-size: 25px;
     background-color: rgba(28, 58, 19, 1);
     color:rgba(162, 242, 146, 1);

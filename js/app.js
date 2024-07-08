@@ -3,7 +3,7 @@ const context = gameSection.getContext('2d');
 const scoreEl = document.getElementById('scoreTxt');
 const highScoreEl = document.getElementById('highScore');
 const restartBtn = document.getElementById('restart');
-
+const startGameBtnEl = document.getElementById('start-game');
 
 const gridSize = 20;
 const height = gameSection.height;
@@ -28,9 +28,9 @@ let eggY;
 let distanceX = gridSize; 
 let distanceY = 0;
 
-startGame();
-
 function startGame () {
+    startGameBtnEl.style.display = 'none';
+    restartBtn.style.display = 'block';
     isGameRunning = true;
     generateEgg();
     displayEgg();
@@ -71,7 +71,7 @@ function snakeMovement () {
 
     if (wholeSnake[0].x === eggX && wholeSnake[0].y === eggY) {
         score+= 1;
-        scoreEl.textContent = `Current score ${score}`;
+        scoreEl.textContent = `Current Score ${score}`;
         clearGameSec();
         generateEgg();    
     }
@@ -136,7 +136,7 @@ function gameOver () {
     bodyCollision();
     if (score > highScore) {
         highScore = score;
-        highScoreEl.textContent = `Highest score: ${highScore}`;
+        highScoreEl.textContent = `High Score: ${highScore}`;
     }
 }
 
@@ -166,8 +166,8 @@ function bodyCollision () {
 function gameOverText () {
     if (!isGameRunning) {
         context.fillStyle = 'rgba(236, 78, 32, 1)';
-        context.font = '100px Tiny5';
-        context.fillText('GAME OVER ', width / 12, height / 2);
+        context.font = '100px Chakra Petch';
+        context.fillText('GAME OVER ', width / 13, height / 2);
         isGameRunning = false;
     }    
     
@@ -187,5 +187,7 @@ function restartGame () {
     startGame();
 }
 
+startGameBtnEl.addEventListener('click',  startGame);
 window.addEventListener('keydown', changeSnakeDirection);
 restartBtn.addEventListener('click', restartGame);
+
