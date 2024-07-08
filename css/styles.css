@@ -1,29 +1,31 @@
 body {
-    background-color: rgba(104, 102, 143, 1);
+    background-color: rgba(254, 192, 170, 1);
     align-content: center;
 }
 
 #game-container {
+    display: flex-box;
     font-family: "Tiny5", cursive;
-    color: rgba(0, 0, 0, 1);
+    color: rgba(28, 58, 19, 1);
     text-align: center;
     font-size: 23px;
 }
-/* /* rgba(162, 242, 146, 1 font header */
+
 #gameSection {
     border: 3px solid;
     border-radius: 5px;
+    color: rgba(236, 78, 32, 1);
 }
 
 #scoreTxt, #highScore {
-    font-size: 27px;
-    color: rgba(162, 242, 146, 1);
+    font-size: 37px;
+    color: rgba(28, 58, 19, 1);
 }
 
 #restart {
     font-family: "Tiny5", cursive;
     font-size: 25px;
-    background-color: rgba(134, 111, 9, 1);
+    background-color: rgba(28, 58, 19, 1);
     color:rgba(162, 242, 146, 1);
     cursor: pointer;
 }
